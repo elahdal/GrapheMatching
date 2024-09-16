@@ -22,7 +22,30 @@ Our library models several classes to manage graph components:
 
 ![Capture d'écran 2024-09-16 215200](https://github.com/user-attachments/assets/27480bd0-a1fc-4451-9773-d125b3c37943)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Use Case Diagram
+
+![Capture d'écran 2024-09-16 215315](https://github.com/user-attachments/assets/dd4eada1-adcb-43d8-b0bf-22bb767d687e)
+
+## User Manual
+
+Adding a Vertex:
+Use the method ```GRO_AjouterSommet(id: string)``` from the CGraphOrient class to add a new vertex to the graph by specifying its identifier.
+
+Modifying a Vertex:
+Use the method ```GRO_ModifierSommet(id: string, newid: string)``` from the CGraphOrient class to modify the identifier of an existing vertex in the graph.
+
+Deleting a Vertex:
+Use the method ```GRO_SuprimerSommet(id: string)``` from the CGraphOrient class to delete a vertex from the graph by specifying its identifier.
+Adding an Edge:
+
+Use the method ```GRO_AjouterArc(SommetDebut: string, SommetFin: string)``` from the CGraphOrient class or the method ```GRA_AjouterArcNonOriente(SommetDebut: string, SommetFin: string)``` from the CGraph class to add an undirected edge between two specified vertices.
+
+Modifying an Edge:
+To modify an edge, use the method ```GRO_ModifierArc(SommetDebut: string, SommetFin: string, newSommetDebut: string, newSommetFin: string)``` from the CGraphOrient class.
+
+Deleting an Edge:
+To delete an edge between two vertices, use the method ```GRO_SuprimerArc(SommetDebut: string, SommetFin: string)``` from the CGraphOrient class.
+For an undirected edge, use the method GRA SuprimerArcNonOriente(SommetDebut: string, SommetFin: string) from the CGraph class.
 
 Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 

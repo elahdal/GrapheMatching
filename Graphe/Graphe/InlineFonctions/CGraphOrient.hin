@@ -1,0 +1,29 @@
+template <typename Arc, typename Sommet>
+inline CGraphOrient<Arc, Sommet>::CGraphOrient() {}
+
+template <typename Arc, typename Sommet>
+inline CGraphOrient<Arc, Sommet>::CGraphOrient(const CGraphOrient& Graph) {
+	CException exception;
+	if (Graph.lpGRO_listeSommet.size() == 0) {
+		exception.EXC_ModifierMessage(EXC_PAS_ASSEZ_DE_SOMMET);
+		throw exception;
+	}
+
+	for (Sommet* sommet : Graph.lpGRO_listeSommet) {
+		lpGRO_listeSommet.push_back(new Sommet(*sommet));
+	}
+	for (Arc* arc : Graph.lpGRO_listeArc) {
+		lpGRO_listeArc.push_back(new Arc(*arc));
+	}
+}
+
+template <typename Arc, typename Sommet>
+inline CGraphOrient<Arc, Sommet>::~CGraphOrient() {
+
+	for (Sommet* sommet : lpGRO_listeSommet) {
+		delete sommet;
+	}
+	for (Arc* arc : lpGRO_listeArc) {
+		delete arc;
+	}
+}

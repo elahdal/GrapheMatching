@@ -1,0 +1,20 @@
+inline CArc::CArc()
+{
+	sARCSommetDebut = '\0';
+	sARCSommetFin = '\0';
+}
+
+inline CArc::CArc(string sommeDeb, string sommeFin) {
+	sARCSommetDebut = sommeDeb;
+	sARCSommetFin = sommeFin;
+};
+
+inline CArc::~CArc()
+{
+}
+
+inline CArc::CArc(const CArc& arc)
+{
+	sARCSommetDebut = arc.sARCSommetDebut;
+	sARCSommetFin = arc.sARCSommetFin;
+}

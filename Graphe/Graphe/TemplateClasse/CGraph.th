@@ -1,0 +1,29 @@
+template <typename TArc, typename TSommet>
+void CGraph<TArc, TSommet> ::GRA_AjouterArcNonOriente(string SommetDebut, string SommetFin) {
+	this->GRO_AjouterArc(SommetDebut, SommetFin);
+	this->GRO_AjouterArc(SommetFin, SommetDebut);
+}
+
+
+template <typename TArc, typename TSommet>
+void CGraph<TArc, TSommet> ::GRA_SuprimerSommet(string id) {
+	this->GRO_SuprimerSommet(id);
+}
+
+template <typename TArc, typename TSommet>
+void CGraph<TArc, TSommet> :: GRA_ModifierArcNonOriente(string sommetDebutInitial, string sommetFinInitial, string NvSommmetDebut, string NvSommetFin) {
+	this->GRO_ModifierArc(sommetDebutInitial, sommetFinInitial, NvSommmetDebut, NvSommetFin);
+	this->GRO_ModifierArc(sommetFinInitial, sommetDebutInitial, NvSommetFin, NvSommmetDebut);
+}
+
+template <typename TArc, typename TSommet>
+void CGraph<TArc, TSommet> ::GRA_SuprimerArcNonOriente(string sommetDebut, string sommetFin) {
+	this->GRO_SuprimerArc(sommetDebut, sommetFin);
+	this->GRO_SuprimerArc(sommetFin, sommetDebut);
+}
+
+
+
+
+
+

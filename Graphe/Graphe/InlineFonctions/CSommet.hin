@@ -1,0 +1,14 @@
+inline CSommet::CSommet(){
+sSOM_IdSommet = '\0';
+}
+
+inline CSommet::~CSommet() {
+	lpSOM_ArcSortant.clear();
+	lpSOM_ArcEntrant.clear();
+}
+
+inline CSommet::CSommet(const CSommet& SOMParam) {
+	sSOM_IdSommet = SOMParam.sSOM_IdSommet;
+	lpSOM_ArcSortant = SOMParam.lpSOM_ArcSortant;
+	lpSOM_ArcEntrant = SOMParam.lpSOM_ArcEntrant;
+}

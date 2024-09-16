@@ -1,0 +1,222 @@
+inline void lireGraphe(const string& nomFichier, int option) {
+    if (option == 1)
+    {
+        CException exception;
+        CGraphOrient<CArc, CSommet> g;
+        string ligne;
+        int nbSommets, nbArcs;
+        int nomSommet;
+        ifstream fichier(nomFichier);
+        if (fichier) {
+
+            getline(fichier, ligne);
+
+            sscanf_s(ligne.c_str(), "NBSommets=%d", &nbSommets);
+            getline(fichier, ligne);
+
+            sscanf_s(ligne.c_str(), "NBArcs=%d", &nbArcs);
+            getline(fichier, ligne);
+
+
+            while (getline(fichier, ligne) && ligne != "]") {
+
+                sscanf_s(ligne.c_str(), "Numero=%d", &nomSommet);
+
+                g.GRO_AjouterSommet(to_string(nomSommet));
+            }
+
+            getline(fichier, ligne);
+            while (getline(fichier, ligne) && ligne != "]") {
+                int depart, arrivee;
+                sscanf_s(ligne.c_str(), "Debut=%d, Fin=%d", &depart, &arrivee);
+
+                g.GRO_AjouterArc(to_string(depart), to_string(arrivee));
+                if (g.GRO_ArcEstDansGraph(to_string(arrivee), to_string(depart))) {
+                    exception.EXC_ModifierMessage(EXC_GRAPHE_NON_ORIENT);
+                    throw exception;
+                }
+            }
+            AGraph<CArc, CSommet> a(g);
+            a.A_AffichierGraphe();
+
+
+            cout << "\n|*********************************|" << endl;
+            cout << "|******** Graphe Inverse: ********|" << endl;
+            cout << "|*********************************| \n" << endl;
+
+            CGraphOrient<CArc, CSommet> g2(g.GRO_InverserGraph());
+
+            AGraph<CArc, CSommet> a2(g2);
+            a2.A_AffichierGraphe();
+
+            system("pause");
+
+        }
+        else {
+            exception.EXC_ModifierMessage(EXC_FICHIER_INTROUVABLE);
+            throw exception;
+        }
+    }
+    else if (option == 2)
+    {
+        CException exception;
+        CGraph<CArc, CSommet> g;
+        string ligne;
+        int nbSommets, nbArcs;
+        int nomSommet;
+        ifstream fichier(nomFichier);
+        if (fichier) {
+
+            getline(fichier, ligne);
+
+            sscanf_s(ligne.c_str(), "NBSommets=%d", &nbSommets);
+            getline(fichier, ligne);
+
+            sscanf_s(ligne.c_str(), "NBArcs=%d", &nbArcs);
+            getline(fichier, ligne);
+            while (getline(fichier, ligne) && ligne != "]") {
+
+                sscanf_s(ligne.c_str(), "Numero=%d", &nomSommet);
+                g.GRO_AjouterSommet(to_string(nomSommet));
+            }
+
+            getline(fichier, ligne);
+            while (getline(fichier, ligne) && ligne != "]") {
+                int depart, arrivee;
+                sscanf_s(ligne.c_str(), "Debut=%d, Fin=%d", &depart, &arrivee);
+                g.GRA_AjouterArcNonOriente(to_string(depart), to_string(arrivee));
+
+            }
+            AGraph<CArc, CSommet> a(g);
+            a.A_AffichierGraphe();
+
+            cout << "\n|*********************************|" << endl;
+            cout << "|******** Graphe Inverse: ********|" << endl;
+            cout << "|*********************************| \n" << endl;
+
+            g.GRO_InverserGraph();
+
+            AGraph<CArc, CSommet> a2(g);
+            a2.A_AffichierGraphe();
+
+              cout << "|*********************************|" << endl;
+            cout << "|******** Couplage: ********|" << endl;
+            cout << "|*********************************| \n" << endl;
+
+            CCouplage<CArc> C;
+           bool isvalid =  C.COU_TestCouplage(g,C.COU_Couplage(g));
+           if (isvalid == true) {
+			   cout << "Le couplage est de taille maximum" << endl;
+           }
+           else {
+           cout << "Le couplage n'est pas de taille maximum" << endl;
+           }
+
+           AGraph<CArc, CSommet> a3(g);
+            a3.A_AffichierGraphe();
+            system("pause");
+        }
+        else {
+            exception.EXC_ModifierMessage(EXC_FICHIER_INTROUVABLE);
+            throw exception;
+        }
+
+    }
+}
+
+
+
+inline void lireGraphe_string(const string& nomFichier, int option) {
+    if (option == 1)
+    {
+        CException exception;
+        CGraphOrient<CArc, CSommet> g;
+        ifstream fichier(nomFichier);
+        if (fichier) {
+            string ligne;
+            unsigned int nbSommets, nbArcs;
+            getline(fichier, ligne);
+            sscanf_s(ligne.c_str(), "NBSommets=%d", &nbSommets);
+            getline(fichier, ligne);
+            sscanf_s(ligne.c_str(), "NBArcs=%d", &nbArcs);
+            getline(fichier, ligne);
+            while (getline(fichier, ligne) && ligne != "]") {
+                char nomSommet[50];
+                sscanf_s(ligne.c_str(), "Numero=\"%[^\"]\"", nomSommet, sizeof(nomSommet));
+                g.GRO_AjouterSommet(nomSommet);
+            }
+            getline(fichier, ligne);
+            while (getline(fichier, ligne) && ligne != "]") {
+                char depart[50], arrivee[50];
+                sscanf_s(ligne.c_str(), "Debut=\"%[^\"]\", Fin=\"%[^\"]\"", depart, sizeof(depart), arrivee, sizeof(arrivee));
+                g.GRO_AjouterArc(depart, arrivee);
+                if (g.GRO_ArcEstDansGraph(arrivee, depart)) {
+                    exception.EXC_ModifierMessage(EXC_GRAPHE_NON_ORIENT);
+                    throw exception;
+                }
+            }
+            AGraph<CArc, CSommet> a(g);
+            a.A_AffichierGraphe();
+
+
+
+            cout << "\n|*********************************|" << endl;
+            cout << "|******** Graphe Inverse: ********|" << endl;
+            cout << "|*********************************| \n" << endl;
+
+            CGraphOrient<CArc, CSommet> g2(g.GRO_InverserGraph());
+
+            AGraph<CArc, CSommet> a2(g2);
+            a2.A_AffichierGraphe();
+
+            system("pause");
+        }
+    else {
+        exception.EXC_ModifierMessage(EXC_FICHIER_INTROUVABLE);
+        throw exception;
+    }
+}
+    else if (option == 2)
+    {
+        CException exception;
+        CGraph<CArc, CSommet> g;
+        ifstream fichier(nomFichier);
+        if (fichier) {
+            string ligne;
+            unsigned int nbSommets, nbArcs;
+            getline(fichier, ligne);
+            sscanf_s(ligne.c_str(), "NBSommets=%d", &nbSommets);
+            getline(fichier, ligne);
+            sscanf_s(ligne.c_str(), "NBArcs=%d", &nbArcs);
+            getline(fichier, ligne);
+            while (getline(fichier, ligne) && ligne != "]") {
+                char nomSommet[50];
+                sscanf_s(ligne.c_str(), "Numero=\"%[^\"]\"", nomSommet, sizeof(nomSommet));
+                g.GRO_AjouterSommet(nomSommet);
+            }
+            getline(fichier, ligne);
+            while (getline(fichier, ligne) && ligne != "]") {
+                char depart[50], arrivee[50];
+                sscanf_s(ligne.c_str(), "Debut=\"%[^\"]\", Fin=\"%[^\"]\"", depart, sizeof(depart), arrivee, sizeof(arrivee));
+                g.GRA_AjouterArcNonOriente(depart, arrivee);
+            }
+            AGraph<CArc, CSommet> a(g);
+            a.A_AffichierGraphe();
+
+            cout << "\n|*********************************|" << endl;
+            cout << "|******** Graphe Inverse: ********|" << endl;
+            cout << "|*********************************| \n" << endl;
+
+            g.GRO_InverserGraph();
+
+            AGraph<CArc, CSommet> a2(g);
+            a2.A_AffichierGraphe();
+
+            system("pause");
+        }
+        else {
+            exception.EXC_ModifierMessage(EXC_FICHIER_INTROUVABLE);
+            throw exception;
+        }
+    }
+}

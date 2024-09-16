@@ -1,0 +1,467 @@
+template<typename Arc, typename Sommet>
+list<Sommet*> CGraphOrient<Arc, Sommet>::GRO_GetlisteSommet()
+{
+	//Exeption pour voir s'il y'a assez de sommet
+	CException exception;
+	if (lpGRO_listeSommet.size() == 0)
+	{
+		exception.EXC_ModifierMessage(EXC_PAS_ASSEZ_DE_SOMMET);
+		throw exception;
+	}
+
+
+	return lpGRO_listeSommet;
+}
+
+template<typename Arc, typename Sommet>
+Sommet* CGraphOrient<Arc, Sommet>::GRO_GetInstanceSommet(string id) const {
+	CException exception;
+	if (lpGRO_listeSommet.size() == 0)
+	{
+		exception.EXC_ModifierMessage(EXC_PAS_ASSEZ_DE_SOMMET);
+		throw exception;
+
+	}
+	else {
+		//parcours de la liste des sommet de l'objet CGrapheOriente
+		for (Sommet* sommet : lpGRO_listeSommet) {
+
+			//on cherche parmi la liste des sommet celui qui a l'id agal au parametre de cette fonction  
+			if (sommet->SOM_GetIdSommet() == id) {
+
+				//une fois trouvé on retourne ce sommet 
+				return sommet;
+
+			}
+		}
+
+		//Exeption si on trouve pas le sommet parmi la liste
+		exception.EXC_ModifierMessage(EXC_SOMMET_INTROUVABLE);
+		throw exception;
+
+	}
+}
+
+template <typename Arc, typename Sommet>
+int CGraphOrient<Arc, Sommet>::GRO_GetSizeListeSommet() {
+	CException exception;
+	if (lpGRO_listeSommet.size() == 0) {
+
+		//Exeption si la liste est vide 
+		exception.EXC_ModifierMessage(EXC_PAS_ASSEZ_DE_SOMMET);
+		throw exception;
+	}
+
+	//retourne la taille de la liste 
+	return lpGRO_listeSommet.size();
+}
+
+template< typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet> ::GRO_VerifierAllocationMemoire(Sommet* sommet) {
+
+	//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+	if (sommet == nullptr)
+	{
+		CException exception;
+		exception.EXC_ModifierMessage(EXC_ERREUR_GESTION_ESPACE_MEMOIRE);
+		throw exception;
+	}
+}
+
+template< typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet> ::GRO_VerifierAllocationMemoire(Arc* arc) {
+
+	//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+	if (arc == nullptr)
+	{
+		CException exception;
+		exception.EXC_ModifierMessage(EXC_ERREUR_GESTION_ESPACE_MEMOIRE);
+		throw exception;
+	}
+}
+
+template< typename Arc, typename Sommet>
+bool CGraphOrient<Arc, Sommet> ::GRO_SommetEstDansGraph(string id) {
+
+	for (Sommet* sommet : lpGRO_listeSommet) {
+
+		//on cherche parmi la liste des sommet celui qui a l'id agal au parametre de cette fonction  
+		if (sommet->SOM_GetIdSommet() == id) {
+
+			//Une fois trouvé on retourne vrai
+			return true;
+		}
+	}
+	//Si non faux 
+	return false;
+}
+
+template<typename Arc, typename Sommet>
+bool CGraphOrient<Arc, Sommet>::GRO_ArcEstDansGraph(string SommetDebut, string SommetFin)
+{
+	for (Arc* arc : lpGRO_listeArc) {
+		if (arc->ARCGetSommetDebut() == SommetDebut && arc->ARCGetSommetFin() == SommetFin) {
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+template<typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet>::GRO_AjouterSommet(string id)
+{
+	CException exception;
+	
+	// /!\ 	//Exeption pour verifier si le sommet existe deja dans la liste de sommet /!\ /!\ 
+	if (GRO_SommetEstDansGraph(id)) {
+
+		exception.EXC_ModifierMessage(EXC_SOMMET_EXISTE_DEJA);
+		throw exception;
+	}
+
+	//Si non on cree le sommet 
+	Sommet* sommet = new Sommet();
+	GRO_VerifierAllocationMemoire(sommet);
+
+	//On ajoute son id 
+	sommet->SOM_SetIdSommet(id);
+
+	//Et on l'ajoute a la liste de sommet 
+	lpGRO_listeSommet.push_back(sommet);
+
+}
+
+template<typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet>::GRO_ModifierSommet(string id, string newId) {
+
+	CException exception;
+
+	// /!\ exeption si le sommet a modifier n'esxiste pas:  SOMMET_EXISTE_PAS /!\ /!\ 
+	if ( (!GRO_SommetEstDansGraph(id)) ) {
+
+		exception.EXC_ModifierMessage(EXC_SOMMET_INTROUVABLE);
+		throw exception;
+	}
+
+	// /!\ exeption si l'e sommet l'identifiant nouveau esxiste deja:  EXC_SOMMET_EXISTE_DEJA /!\ /!\ 
+	else if ((GRO_SommetEstDansGraph(newId))) {
+
+		exception.EXC_ModifierMessage(EXC_SOMMET_EXISTE_DEJA);
+		throw exception;
+	}
+
+	//On recupere l'instance du sommet voulu
+	Sommet* InstanceSommetAModifier = GRO_GetInstanceSommet(id);
+
+
+	//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+	GRO_VerifierAllocationMemoire(InstanceSommetAModifier);
+
+	//Creation d'une liste temporaire ou on stocke les arcs entrant au sommet a modifier
+	list<Arc*> ListArcsEntrantAusommet = InstanceSommetAModifier->SOM_GetArcEntrant();
+
+	//On parcours cette liste d'arc pour modifier les sommets fin de chaqu'un de ces arcs.
+	for (Arc* arc : ListArcsEntrantAusommet) {
+		arc->ARCSetSommetFin(newId);
+	}
+
+	//Creation d'une liste temporaire ou on stocke les arcs sortants du sommet a modifier
+	list<Arc*> ListArcsSortantDusommet = InstanceSommetAModifier->SOM_GetArcSortant();
+
+	//On parcours cette liste d'arc pour modifier les sommets débuts de chaqu'un de ces arcs.
+	for (Arc* arc : ListArcsSortantDusommet) {
+		arc->ARCSetSommetDebut(newId);
+	}
+
+	//On oublie pas de modifier l'identifiant du sommet 
+	InstanceSommetAModifier->SOM_SetIdSommet(newId);
+
+}
+
+template<typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet>::GRO_AjouterArc(string SommetDebut, string SommetFin)
+{
+	CException exception;
+
+	//Si le nombre de sommete est inferieur a 2 il y'aura pas assez de sommet pour creer l'arc .
+	if (lpGRO_listeSommet.size() < 2)
+	{
+		exception.EXC_ModifierMessage(EXC_PAS_ASSEZ_DE_SOMMET);
+		throw exception;
+	}
+
+	//On peut pas creer un arc allant et arrivant au meme sommet.
+	else if (SommetDebut == SommetFin)
+	{
+		exception.EXC_ModifierMessage(EXC_SOMMET_DEBUT_FIN);
+		throw exception;
+	}
+	else if (GRO_ArcEstDansGraph(SommetDebut, SommetFin))
+	{
+		exception.EXC_ModifierMessage(EXC_ARC_EXISTE_DEJA);
+		throw exception;
+	}
+	else if ((!GRO_SommetEstDansGraph(SommetDebut)) || (!GRO_SommetEstDansGraph(SommetFin))) {
+
+		exception.EXC_ModifierMessage(EXC_SOMMET_INTROUVABLE);
+		throw exception;
+	}
+	else
+	{
+		//On recupere l'instance des deux sommet de debut et de fin 
+		Sommet* sommetDebut = GRO_GetInstanceSommet(SommetDebut);
+		Sommet* sommetFin = GRO_GetInstanceSommet(SommetFin);
+
+		//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+		GRO_VerifierAllocationMemoire(sommetDebut);
+		GRO_VerifierAllocationMemoire(sommetFin);
+
+
+		//On cree le nouveau Arc et on enrigistre dans ses attributs sommet de debut et de fin.
+		Arc* arc = new Arc(SommetDebut, SommetFin);
+
+		//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+		GRO_VerifierAllocationMemoire(arc);
+
+
+		//On ajoute cet arc au liste des arcs sortant du sommet debut 
+		sommetDebut->SOM_AjouterArcSortant(arc);
+
+		//De meme pour la liste des arcs entrant du sommet fin 
+		sommetFin->SOM_AjouterArcEntrant(arc);
+
+		//Ajouter l'Arc a la liste des pointeur vers les arcs
+		lpGRO_listeArc.push_back(arc);
+	}
+
+}
+
+template< typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet> ::GRO_SuprimerToutArcEntrantAuSommet(string id) {
+	// /!\ exeption si le sommet n esxiste pas:  SOMMET_EXISTE_PAS /!\ /!\ 
+	if (!GRO_SommetEstDansGraph(id)) {      // cad false 
+		CException exception;
+		exception.EXC_ModifierMessage(EXC_SOMMET_INTROUVABLE);
+		throw exception;
+	}
+	//On recupere l'instance du sommet voulu
+	Sommet* InstanceSommetASuprimmer = GRO_GetInstanceSommet(id);
+
+	//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+	GRO_VerifierAllocationMemoire(InstanceSommetASuprimmer);
+
+	//Creation d'une liste temporaire ou on stocke les arcs entrant au sommet a suprimmer
+	list<Arc*> ListArcsEntrantAusommet = InstanceSommetASuprimmer->SOM_GetArcEntrant();
+
+	//On parcours cette liste d'arc pour recuperer les sommets débuts de chaqu'un de ces arcs.
+	for (Arc* arc : ListArcsEntrantAusommet) {
+
+		//On recupere l'instance de chaqu'un de nos sommets débuts
+		Sommet* SommetCurrent = GRO_GetInstanceSommet(arc->ARCGetSommetDebut());
+
+		//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+		GRO_VerifierAllocationMemoire(SommetCurrent);
+
+		//On suprimme cet arc de la liste des arcs sortant du sommet de debut
+		SommetCurrent->SOM_SuprimerArcSortant(arc);
+
+		//on oublie pas de suprimmer ce meme arc de la liste des arcs entrants du sommet a suprimmer  
+		InstanceSommetASuprimmer->SOM_SuprimerArcEntrant(arc);
+
+		//Finalement on enleve l'arc de la liste des pointeurs d'arcs de notre objet CgrapheOrient 
+		lpGRO_listeArc.remove(arc);
+
+		//On suprimme l'arc
+		delete arc;
+	}
+}
+
+template< typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet> ::GRO_SuprimerToutArcSortantDuSommet(string id) {
+
+	CException exception;
+
+	// /!\ exeption si le sommet n esxiste pas:  SOMMET_EXISTE_PAS /!\ /!\ 
+	if (!GRO_SommetEstDansGraph(id)) {      // cad false 
+		exception.EXC_ModifierMessage(EXC_SOMMET_INTROUVABLE);
+		throw exception;
+	}
+
+	//On recupere l'instance du sommet voulu
+	Sommet* InstanceSommetASuprimmer = GRO_GetInstanceSommet(id);
+
+	//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+	GRO_VerifierAllocationMemoire(InstanceSommetASuprimmer);
+
+	//Creation d'une liste temporaire où on stocke les arcs sortants du sommet a suprimmer
+	list<Arc*> ListArcsSortantDusommet = InstanceSommetASuprimmer->SOM_GetArcSortant();
+
+
+	//On parcours cette liste d'arc pour recuperer les sommets fin de chaqu'un de ces arcs.
+	for (Arc* arc : ListArcsSortantDusommet) {
+
+		//On recupere l'instance de chaqu'un de nos sommets fin.
+		Sommet* SommetCurrent = GRO_GetInstanceSommet(arc->ARCGetSommetFin());
+
+		//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+		GRO_VerifierAllocationMemoire(SommetCurrent);
+
+		// A partir de cette instence on suprimme cet arc de la liste des arcs entrants
+		SommetCurrent->SOM_SuprimerArcEntrant(arc);
+
+		//on oublie pas de suprimmer ce meme arc de la liste des arcs sortant du sommet a suprimmer . 
+		InstanceSommetASuprimmer->SOM_SuprimerArcSortant(arc);
+
+		//Finalement on enleve l'arc de la liste des pointeurs d'arcs de notre objet CgrapheOrient 
+		lpGRO_listeArc.remove(arc);
+
+		//On suprimme l'arc
+		delete arc;
+	}
+}
+
+template< typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet> ::GRO_SuprimerSommet(string id) {
+	CException exception;
+
+	// /!\ exeption si le sommet n esxiste pas:  SOMMET_EXISTE_PAS /!\ /!\ 
+	if (!GRO_SommetEstDansGraph(id)) {      // cad false 
+		exception.EXC_ModifierMessage(EXC_SOMMET_INTROUVABLE);
+		throw exception;
+	}
+
+	//On recupere l'instance du sommet a suprimmer
+	Sommet* SommetCurrent = GRO_GetInstanceSommet(id);
+
+	//  /!\ Exeption pour verifier si l'espace mémoire a bien été alloué /!\ 
+	GRO_VerifierAllocationMemoire(SommetCurrent);
+
+
+	//On appelle notre fonction pour suprimmer tout les arcs entrant au sommet 
+	GRO_SuprimerToutArcEntrantAuSommet(id);
+
+	//de meme pour notre fonction pour suprimmer tout les arcs sortants du sommet
+	GRO_SuprimerToutArcSortantDuSommet(id);
+
+	// On oublie pas d'enlever le sommet a suprimmer de la liste des sommet de l'objet CGraphOrient 
+	lpGRO_listeSommet.remove(SommetCurrent);
+
+	//On libere l'espace mémoire
+	delete SommetCurrent;
+}
+
+template< typename Arc, typename Sommet>
+CGraphOrient<Arc, Sommet> CGraphOrient<Arc, Sommet>::GRO_InverserGraph() {
+
+	// Création d'un nouveau objet graphe orienté pour stocker le graphe inversé
+	CGraphOrient<Arc, Sommet> Graphe_inverse;
+
+	// Exceptions à traiter : INDICE_HORS_TABLEAU /!\
+	
+	// Parcours de la liste des sommets du graphe actuel
+	for (Sommet* Som : lpGRO_listeSommet) {
+
+		// Ajout de chaque sommet dans le graphe inversé
+		Graphe_inverse.GRO_AjouterSommet(Som->SOM_GetIdSommet());
+	}
+
+	// Parcours de la liste des arcs du graphe actuel
+	for (Arc* arc : lpGRO_listeArc) {
+
+		// Ajout de chaque arc dans le graphe inversé en inversant les sommets de chaque arc
+		Graphe_inverse.GRO_AjouterArc(arc->ARCGetSommetFin(), arc->ARCGetSommetDebut());
+	}
+
+	// Retour du graphe inversé
+	return Graphe_inverse;
+}
+
+
+
+template<typename Arc, typename Sommet>
+Arc* CGraphOrient<Arc, Sommet>::GRO_GetInstanceArc(string sommetDebut, string sommetFin) {
+	for (auto it = lpGRO_listeArc.begin(); it != lpGRO_listeArc.end(); it++) {
+		if ((*it)->ARCGetSommetDebut() == sommetDebut && (*it)->ARCGetSommetFin() == sommetFin) {
+			return *it;
+		}
+	}
+	return NULL;
+}
+
+
+template<typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet>::GRO_ModifierArc(string sommetDebutInitial, string sommetFinInitial, string sommetDebutNouveau, string sommetFinNouveau) {
+
+	Arc* ArcAModifier = GRO_GetInstanceArc(sommetDebutInitial, sommetFinInitial);
+	Sommet* sommetDebutExistant = GRO_GetInstanceSommet(sommetDebutInitial);
+	Sommet* sommetFinExistant = GRO_GetInstanceSommet(sommetFinInitial);
+	Sommet* nouveauSommetDebut = GRO_GetInstanceSommet(sommetDebutNouveau);
+	Sommet* nouveauSommetFin = GRO_GetInstanceSommet(sommetFinNouveau);
+
+	// /!\ Exeptions /!\ /!\ 
+	CException exception;
+	if (!GRO_ArcEstDansGraph(ArcAModifier->ARCGetSommetDebut(), ArcAModifier->ARCGetSommetFin())) {
+		exception.EXC_ModifierMessage(EXC_ARC_EXISTE_PAS);
+		throw exception;
+	}
+	else if ((sommetDebutInitial == sommetFinInitial) || (sommetDebutNouveau == sommetFinNouveau))
+	{
+		exception.EXC_ModifierMessage(EXC_SOMMET_DEBUT_FIN);
+		throw exception;
+	}
+	else if ((!GRO_SommetEstDansGraph(sommetDebutInitial)) || (!GRO_SommetEstDansGraph(sommetFinInitial))) {
+
+		exception.EXC_ModifierMessage(EXC_SOMMET_INTROUVABLE);
+		throw exception;
+	}
+	else {
+		sommetDebutExistant->SOM_SuprimerArcSortant(ArcAModifier);
+		sommetFinExistant->SOM_SuprimerArcEntrant(ArcAModifier);
+		nouveauSommetDebut->SOM_AjouterArcSortant(ArcAModifier);
+		nouveauSommetFin->SOM_AjouterArcEntrant(ArcAModifier);
+
+		ArcAModifier->ARCSetSommetDebut(sommetDebutNouveau);
+		ArcAModifier->ARCSetSommetFin(sommetFinNouveau);
+	}
+}
+
+
+
+
+
+template< typename Arc, typename Sommet>
+void CGraphOrient<Arc, Sommet> ::GRO_SuprimerArc(string sommetDebut, string sommetFin) {
+
+	Arc* ArcAModifier = GRO_GetInstanceArc(sommetDebut, sommetFin);
+
+	Sommet* InstenceSommetDebutInital = GRO_GetInstanceSommet(ArcAModifier->ARCGetSommetDebut());
+	Sommet* InstenceSommetFinInitial = GRO_GetInstanceSommet(ArcAModifier->ARCGetSommetFin());
+
+	// /!\ Exeptions /!\ /!\ 
+	CException exception;
+	if (!GRO_ArcEstDansGraph(ArcAModifier->ARCGetSommetDebut(), ArcAModifier->ARCGetSommetFin())) {
+		exception.EXC_ModifierMessage(EXC_ARC_EXISTE_PAS);
+		throw exception;
+	}
+	else {
+
+		InstenceSommetDebutInital->SOM_SuprimerArcSortant(ArcAModifier);
+		InstenceSommetFinInitial->SOM_SuprimerArcEntrant(ArcAModifier);
+
+		lpGRO_listeArc.remove(ArcAModifier);
+		delete ArcAModifier;
+	}
+}
+
+template<typename Arc, typename Sommet>
+CGraphOrient<Arc,Sommet>& CGraphOrient<Arc, Sommet>::operator=(CGraphOrient& Graph)
+{
+	if (this != &Graph)
+	{
+		this->lpGRO_listeArc = Graph.lpGRO_listeArc;
+		this->lpGRO_listeSommet = Graph.lpGRO_listeSommet;
+	}
+	return *this;
+}

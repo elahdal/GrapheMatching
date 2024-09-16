@@ -1,0 +1,14 @@
+template <typename Arc, typename Sommet>
+inline AGraph<typename Arc,typename Sommet>::AGraph() {
+	graph = new CGraphOrient<Arc, Sommet>();
+}
+
+template <typename Arc, typename Sommet>
+inline AGraph<typename Arc,typename Sommet>::~AGraph() {
+	delete graph;
+}
+
+template <typename Arc, typename Sommet>
+inline AGraph<typename Arc, typename Sommet>::AGraph(CGraphOrient<Arc, Sommet>& Graphe) {
+    graph = &Graphe;
+}

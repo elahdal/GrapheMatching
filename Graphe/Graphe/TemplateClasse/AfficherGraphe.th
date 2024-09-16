@@ -1,0 +1,22 @@
+template <typename Arc, typename Sommet>
+void AGraph<Arc, Sommet>::A_AffichierGraphe()
+{
+        list<Sommet*> listeSommet = graph->GRO_GetlisteSommet();
+        for (Sommet* Som : listeSommet) {
+            cout << "============(" << Som->SOM_GetIdSommet() << ")===========" << endl;
+            cout << "Liste des arc Sortants : " << endl;
+            list<Arc*> ListArcsSortantDusommet = Som->SOM_GetArcSortant();
+            for (Arc* arc : ListArcsSortantDusommet) {
+                Sommet* SommetCurrent = graph->GRO_GetInstanceSommet(arc->ARCGetSommetFin());
+                cout << " " << Som->SOM_GetIdSommet() << "----->" << SommetCurrent->SOM_GetIdSommet() << endl;
+            }
+
+            cout << "Liste des arc Entrants : " << endl;
+            list<Arc*> ListArcsEntrantAusommet = Som->SOM_GetArcEntrant();
+            for (Arc* arc : ListArcsEntrantAusommet) {
+                Sommet* SommetCurrent = graph->GRO_GetInstanceSommet(arc->ARCGetSommetDebut());
+                cout << " " << Som->SOM_GetIdSommet() << "<-----" << SommetCurrent->SOM_GetIdSommet() << endl;
+            }
+        }
+}
+

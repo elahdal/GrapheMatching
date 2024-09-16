@@ -2,7 +2,7 @@
 This project focuses on creating a library for building and managing graphs, utilizing key software engineering principles to enhance code structure and maintainability.
 
 
-#Project Overview
+## Project Overview
 Our library models several classes to manage graph components:
 
 -CArc: Represents an arc connecting two vertices. It contains attributes represented by strings, allowing flexibility to use either text or numeric identifiers for the vertices. This class provides methods to create, modify, and access information about an arc in the graph.
@@ -16,10 +16,11 @@ Our library models several classes to manage graph components:
 -AfficherGraph: This class separates display logic from graph management, adhering to the single-responsibility principle, which improves code readability and reusability.
 
 -CException: Handles error management to prevent interruptions in the program's execution. This class displays error messages, facilitating error handling during runtime.
-[Rapport (1).pdf](https://github.com/user-attachments/files/17013954/Rapport.1.pdf)
 
 
-## Getting started
+## UML Diagram
+
+![Capture d'écran 2024-09-16 215200](https://github.com/user-attachments/assets/27480bd0-a1fc-4451-9773-d125b3c37943)
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 

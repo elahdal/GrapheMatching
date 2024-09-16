@@ -1,4 +1,46 @@
-# Graphe
+# Presentation du projet
+A l’issue de la realisation de ce projet nous avons fait appel ´ a plusieurs notions utiles et importantes permettant ` a am ` eliorer ´
+et structurer le code en gen´ eral. Notre projet consiste ´ a cr ` eer une librairie pour la cr ´ eation et la gestion des graphes. Pour ´
+ce faire nous avons fait le choix de modeliser plusieurs classes pour la gestion du code comme pr ´ ecis ´ e sur le sujet : ´ CArc,
+CSommet, CGraphOrient, CGraph;
+Neanmoins nous Avons fait le choix d’ajouter une classe ´ AfficherGraph puisque selon le point de vue genie logiciel, ´
+la creation de la classe AfficherGraph offre une s ´ eparation claire des responsabilit ´ es, facilitant ainsi la maintenance du ´
+code en isolant la logique d’affichage. En encapsulant cette fonctionnalite, le code devient plus r ´ eutilisable et lisible, ´
+favorisant le principe d’encapsulation et de la reutilisation ´ du genie logiciel. ´
+De meme nous avons ˆ egalement inclut une classe nomm ´ ee´ CException comme vu dans le cours pour traiter les erreurs
+probables dans notre code et ainsi eviter les interruptions du projet. Cette classe affiche ´ egalement les messages d’erreurs ´
+facilitant la gestion des erreurs. Pour approfondir davantage, nous allons presenter nos structures utilis ´ ees. Commenc¸ons ´
+par la classe CArc :
+• La classe CArc represente un arc dans un graphe, reliant deux sommets. Cette classe contient deux attributs, ´
+ces derniers sont represent ´ es par des string pour nous laisser la possibilit ´ e de mettre soit un texte ou un num ´ ero ´
+dans l’identifiant des sommets si on le souhaite. Elle contient des methodes permettant de g ´ erer les informations ´
+associees ´ a cet arc. Cette derni ` ere permet de cr ` eer, modifier et acc ´ eder aux informations relatives ´ a un arc dans un `
+graphe.
+• La classe CSommet represente un sommet dans un graphe. Elle contient des attributs tels que l’identifiant du ´
+sommet et des listes de pointeurs d’arcs sortants et entrants. Les methodes de cette classe permettent d’acc ´ eder ´
+a l’identifiant du sommet, aux arcs sortants et entrants, ainsi que d’ajouter ou supprimer des arcs associ ` es´ a ce `
+sommet.
+• La classe CGraphOrient qui est une classe gen´ erique (prend en argument deux classes CArc et CSommet), elle g ´ ere `
+la creation et la gestion d’un graphe elle contient deux attributs : une liste des sommets existants dans le graph, et ´
+une liste d’arc du graph et comporte plusieurs fonctions principales necessaires au graph tel : ´
+– Ajouter/modifier/supprimer un sommet au graphe.
+– Ajouter/modifier/supprimer un arc du graphe.
+– Inverser le graphe.
+De plus on a fait le choix de decomposer certaines fonctions pour utiliser le principe de r ´ eutilisation de g ´ enie ´
+logiciel comme la fonction supprimer sommet ou on fait appel ` a la fonction supprimer tout arc entant au sommet `
+et supprimer tout arc sortant du sommet.Et pour eviter les fuites m ´ emoires on a voulu mettre aussi des m ´ ethodes ´
+qui vont verifier si une allocation a r ´ eussi ou a ´ echou ´ e cette derni ´ ere retourne une exception dans le cas inverse. En `
+combinant ces methodes avec des op ´ erations de gestion des sommets et des arcs, la classe CGraphOrient offre un ´
+ensemble complet de fonctionnalites pour la cr ´ eation, la modification et la suppression des ´ el´ ements d’un graphe ´
+oriente.´
+• La classe CGraph qui herite de la classe ´ CGraphOrient elle gere les graphs non orient ` es, elle utilise les m ´ ethodes ´
+de CGaphOrient pour ajouter, modifier un sommet ou le supprimer de plus elle ajoute une arrete entre deux sommets ˆ
+et modifie une arrete du graphe. ˆ
+• La fonction principale liregraph qui va ouvrir un fichier txt souhaite, le lire et afficher par la suite un graphe soit ´
+oriente soit non Orient ´ e selon l’utilisateur. ´
+NB : notre fonction peut lire des fichier ou les sommets sont des nombres ou des cha ` ˆınes de caracteres. `
+Pendant le developpement de notre code on a fait plusieurs tests dans diff ´ erents sc ´ enarios. on a test ´ e les cas pire ou ´
+impossibles pour traiter les erreurs. Ainsi valider le bon fonctionnement du code et assurer sa qualité.
 
 [Rapport (1).pdf](https://github.com/user-attachments/files/17013954/Rapport.1.pdf)
 
